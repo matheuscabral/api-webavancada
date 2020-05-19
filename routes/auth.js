@@ -2,22 +2,21 @@ const router = require('express').Router();
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { registerValidation } = require('../validacao');
+const {registerValidation,loginValidation} = require('../validacao');
 
 router.post('/register', async(req, res)=>{
     const {error} = registerValidation(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    if(!{error} === undefined) return res.status(400).send(error.details[0].message);
 
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email já cadastrado');
 
-    const salt = await bcrypt.gentSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
 
     const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: hashedPassword,
+        password: hashedPassword
 
     });
     try{
@@ -30,12 +29,12 @@ router.post('/register', async(req, res)=>{
 
 router.post('/login', async(req,res) =>{
     const {error} = loginValidation(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    if(!{error} === undefined) return res.status(400).send(error.details[0].message);
 
-    const user = await User.findOne({email: req.body.email});
+    const user = await User.findOne({ email: req.body.email });
     if(!user) return res.status(400).send('Email não encontrado');
 
-    const validPass = await bcrypt.compare(req.body.password, user.password);
+    const validPass = bcrypt.compareSync(req.body.password, user.password);
     if(!validPass) return res.status(400).send('senha invalida');
 
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);

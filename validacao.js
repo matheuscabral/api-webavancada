@@ -1,20 +1,20 @@
 const joi = require('@hapi/joi');
 
 const registerValidation = (data) => {
-    const schema = {
-        name: joi.string().min(6).required(),
-        email: joi.string().min(6).required().email(),
-        password: joi.string().min(6).required()
-    };
-    return joi.Validate(data, schema);
-}
+    const schema = joi.object({
+      name: joi.string().min(6).required(),
+      email: joi.string().min(6).required().email(),
+      password: joi.string().min(6).required(),
+    });
+    return schema.validate(data);
+};
 
 const loginValidation = (data) => {
-    const schema = {
+    const schema = joi.object({
         email: joi.string().min(6).required().email(),
-        password: joi.string().min(6).required()
-    };
-    return joi.Validate(data, schema);
+        password: joi.string().min(6).required(),
+    });
+    return schema.validate(data);
 }
 
 module.exports.registerValidation = registerValidation;
