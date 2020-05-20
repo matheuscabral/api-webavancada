@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const authRoute = require('./routes/auth');
 
@@ -12,6 +13,8 @@ mongoose.connect(
     { useNewUrlParser: true , useUnifiedTopology: true},
     () => console.log('conectado com o BD')
 );
+
+app.use(cors());
 
 app.use(express.json());
 
