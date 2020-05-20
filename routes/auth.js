@@ -23,7 +23,6 @@ router.post('/register', async(req, res)=>{
         const savedUser = await user.save();
         res.send({ user: user._id });
     }catch(err){
-        console.log(err)
         res.status(400).send(err);
     }
 });
@@ -39,7 +38,7 @@ router.post('/login', async(req,res) =>{
     if(!validPass) return res.status(400).send('senha invalida');
 
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).send(token);
+    //res.header('auth-token', token).send(token); ta dando merda nao sei porque!
     res.send('Login');
 
 });
