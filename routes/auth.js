@@ -38,8 +38,12 @@ router.post('/login', async(req,res) =>{
     if(!validPass) return res.status(400).send('senha invalida');
 
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    //res.header('auth-token', token).send(token); ta dando merda nao sei porque!
-    res.send('Login');
+    res.header('auth-token', token).send({
+        'token': token,
+        'id': user._id
+    });
+
+    //res.send('Login');
 
 });
 
