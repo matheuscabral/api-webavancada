@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const authRoute = require('./routes/auth');
+const messageRoute = require('./routes/message');
 
 dotenv.config();
 
@@ -19,5 +20,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/user', authRoute);
+app.use('/api/message', messageRoute);
 
 app.listen(3000, () => console.log('servidor levantado e rodando!'));
